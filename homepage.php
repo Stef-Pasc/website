@@ -12,10 +12,11 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 require_once "config.php";
 
 // Define variables and initialize with empty values
-$user = $_SESSION["username"];
+$username = $_SESSION["username"];
+$user = $_SESSION["user"];
  
 // Processing form data when form is submitted
-    $sql = "SELECT id, company, owner, quantity FROM tokens WHERE owner = '$user'";
+    $sql = "SELECT id, company, owner, quantity FROM tokens WHERE owner = '$username'";
     if($stmt = mysqli_prepare($link, $sql)){
         if(mysqli_stmt_execute($stmt)){
             // Store result
@@ -40,9 +41,9 @@ $user = $_SESSION["username"];
     }
 
     // selecting data from investor or company
-    if($user!='Investor'){
+    if($user==='Investor'){
         $sentence = "Your investments are : ";
-        $sql = "SELECT companies.company_name, tokens.quantity FROM tokens JOIN companies ON tokens.company_id = companies.company_id JOIN investors ON tokens.investor_id = investors.investor_id WHERE investors.investor_name='$user'";
+        $sql = "SELECT companies.company_name, tokens.quantity FROM tokens JOIN companies ON tokens.company_id = companies.company_id JOIN investors ON tokens.investor_id = investors.investor_id WHERE investors.investor_name='$username'";
         if($stmt = mysqli_prepare($link, $sql)){
             if(mysqli_stmt_execute($stmt)){
 
@@ -61,9 +62,9 @@ $user = $_SESSION["username"];
         mysqli_stmt_close($stmt);
     }
     // selecting data from investor or company
-    if($user!='Company'){
+    elseif($user==='Company'){
         $sentence = "Your investors are : ";
-        $sql = "SELECT investors.investor_name, tokens.quantity FROM tokens JOIN investors ON tokens.investor_id = investors.investor_id JOIN companies ON tokens.company_id = companies.company_id WHERE companies.company_name='$user' ORDER BY tokens.quantity DESC";
+        $sql = "SELECT investors.investor_name, tokens.quantity FROM tokens JOIN investors ON tokens.investor_id = investors.investor_id JOIN companies ON tokens.company_id = companies.company_id WHERE companies.company_name='$username' ORDER BY tokens.quantity DESC";
         if($stmt = mysqli_prepare($link, $sql)){
             if(mysqli_stmt_execute($stmt)){
 

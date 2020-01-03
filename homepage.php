@@ -35,7 +35,61 @@ $user = $_SESSION["username"];
             }
 
         }
+   
+    mysqli_stmt_close($stmt);
     }
+
+    // selecting data from investor or company
+    if($user!='Investor'){
+        $sentence = "Your investments are : ";
+        $sql = "SELECT companies.company_name, tokens.quantity FROM tokens JOIN companies ON tokens.company_id = companies.company_id JOIN investors ON tokens.investor_id = investors.investor_id WHERE investors.investor_name='$user'";
+        if($stmt = mysqli_prepare($link, $sql)){
+            if(mysqli_stmt_execute($stmt)){
+
+                /* bind result variables */
+                mysqli_stmt_bind_result($stmt, $company_name, $quantity);
+                /* fetch values */
+                $j=0;
+                while (mysqli_stmt_fetch($stmt)) {
+                    $data[$j]=array($company_name,$quantity);
+                    //printf ("%s (%s)\n", $company_name, $quantity);
+                    ++$j;
+                }     
+                //for ($j=0;$j<count($data);++$j){printf (" %s %s\n",$data[$j][0],$data[$j][1] );}
+            }
+        }
+        mysqli_stmt_close($stmt);
+    }
+    // selecting data from investor or company
+    if($user!='Company'){
+        $sentence = "Your investors are : ";
+        $sql = "SELECT investors.investor_name, tokens.quantity FROM tokens JOIN investors ON tokens.investor_id = investors.investor_id JOIN companies ON tokens.company_id = companies.company_id WHERE companies.company_name='$user' ORDER BY tokens.quantity DESC";
+        if($stmt = mysqli_prepare($link, $sql)){
+            if(mysqli_stmt_execute($stmt)){
+
+                /* bind result variables */
+                mysqli_stmt_bind_result($stmt, $company_name, $quantity);
+                /* fetch values */
+                $j=0;
+                while (mysqli_stmt_fetch($stmt)) {
+                    $data[$j]=array($company_name,$quantity);
+                    //printf ("%s (%s)\n", $company_name, $quantity);
+                    ++$j;
+                }     
+                //for ($j=0;$j<count($data);++$j){printf (" %s %s\n",$data[$j][0],$data[$j][1] );}
+            }
+        }
+        mysqli_stmt_close($stmt);
+    }
+    
+
+
+
+
+
+
+
+
 
 ?>
 
@@ -54,6 +108,12 @@ $user = $_SESSION["username"];
 <body>
 <div class="page-header">
         <h1>Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to our site as <?php echo htmlspecialchars($_SESSION["user"]); ?>.</h1>
+</div>
+<div class="page-header">
+        <h1> <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b><?php echo htmlspecialchars($sentence); ?></b> </h1>
+</div>
+<div class="page-header">
+        <h1> <b><?php for ($j=0;$j<count($data);++$j){printf (" %s %s \n",$data[$j][0],$data[$j][1] );} ?></b></h1>
 </div>
     <p>
         <a href="reset-password.php" class="btn btn-warning">Reset Your Password</a>

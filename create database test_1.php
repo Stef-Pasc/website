@@ -1,4 +1,3 @@
-
 CREATE TABLE users (
     user_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -43,3 +42,13 @@ CREATE TABLE owners (
     FOREIGN KEY (investor_id) REFERENCES investors(investor_id),
     FOREIGN KEY (company_id) REFERENCES companies(company_id)
     ) ENGINE InnoDB;
+
+INSERT INTO tokens (company_id, quantity, age, family, owner_id)
+VALUES
+(1,  "PJ",         "Mammal",    15, "Dog",           13),
+(2,  "Buffy",      "Mammal",    14, "Dog",           13),
+(3,  "Pixie",      "Mammal",    8,  "Cat",           11),
+(4,  "Charlie",    "Mammal",    7,  "Cat",           7),
+(5,  "Scooter",    "Mammal",    10, "Squirrel",      7),
+(6,  "Smoke",      "Bird",      4,  "Parrot",        8),
+

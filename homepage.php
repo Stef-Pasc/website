@@ -85,13 +85,6 @@ $user = $_SESSION["user"];
     
 
 
-
-
-
-
-
-
-
 ?>
 
 
@@ -109,7 +102,20 @@ $user = $_SESSION["user"];
 <body>
 <div class="page-header">
         <h1>Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to our site as <?php echo htmlspecialchars($_SESSION["user"]); ?>.</h1>
-</div>
+</div> 
+<nav role="navigation">
+  <ul>
+    <li><a href="#">One</a></li>
+    <li><a href="#">Two</a>
+      <ul class="dropdown">
+        <li><a href="#">Sub-1</a></li>
+        <li><a href="#">Sub-2</a></li>
+        <li><a href="#">Sub-3</a></li>
+      </ul>
+    </li>
+    <li><a href="#">Three</a></li>
+  </ul>
+</nav>
 <div class="page-header">
         <h1> <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b><?php echo htmlspecialchars($sentence); ?></b> </h1>
 </div>
